@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-/// A Calculator.
 class JOBody extends StatefulWidget {
   const JOBody({
     Key? key,
@@ -86,9 +85,9 @@ class _JOBodyState extends State<JOBody> with WidgetsBindingObserver {
         appBar: widget.title != null && widget.title!.isNotEmpty
             ? AppBar(
                 title: Text(
-                  widget.title ?? Messages.noTitle,
+                  widget.title ?? "",
                   style: TextStyle(
-                    color: CBase().basePrimaryColor,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               )
