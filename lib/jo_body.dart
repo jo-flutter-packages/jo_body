@@ -3,6 +3,9 @@ library jo_body;
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:jo_buttons/jo_buttons.dart';
+import 'package:jo_loading/jo_loading.dart';
+import 'package:swipe_refresh/swipe_refresh.dart';
 
 class JOBody extends StatefulWidget {
   const JOBody({
@@ -17,6 +20,7 @@ class JOBody extends StatefulWidget {
     this.displayAds = false,
     this.authorized = true,
     this.onPopPushReplacement,
+    required this.authorization,
   }) : super(key: key);
   final bool rtl;
   final Widget body;
@@ -28,6 +32,7 @@ class JOBody extends StatefulWidget {
   final bool displayAds;
   final bool authorized;
   final String? onPopPushReplacement;
+  final Future authorization;
 
   @override
   State<JOBody> createState() => _JOBodyState();
@@ -47,13 +52,7 @@ class _JOBodyState extends State<JOBody> with WidgetsBindingObserver {
     inProgress = widget.inProgress;
 
     if (widget.authorized) {
-      UserServiceV2().getJWT().then((jwt) {
-        UserServiceV2().profile().then((p) {
-          if (!p.isSuccess) {
-            Navigator.of(context).pushNamed(JOPageSignIn.routeName);
-          }
-        });
-      });
+      widget.authorization;
     }
     WidgetsBinding.instance.addObserver(this);
   }
@@ -98,11 +97,33 @@ class _JOBodyState extends State<JOBody> with WidgetsBindingObserver {
             margin: widget.margin,
             height: MediaQuery.of(context).size.height,
             child: widget.inProgress
-                ? JOLoading()
-                : JOBodyWithoutFloatingButton(
-                    body: widget.body,
-                    rtl: widget.rtl,
-                    actions: widget.actions,
+                ? const JOLoading()
+                : Directionality(
+                    textDirection:
+                        widget.rtl ? TextDirection.rtl : TextDirection.ltr,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          flex: 6,
+                          child: SingleChildScrollView(
+                            child: widget.body,
+                          ),
+                        ),
+                        widget.actions != null
+                            ? Container(
+                                width: MediaQuery.of(context).size.width,
+                                margin: const EdgeInsets.all(10.0),
+                                height: 60.0,
+                                child: ListView(
+                                  scrollDirection: Axis.horizontal,
+                                  children: widget.actions!.toList(),
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
           ),
         ),
