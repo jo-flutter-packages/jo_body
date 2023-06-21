@@ -20,6 +20,7 @@ class JOBody extends StatefulWidget {
     this.displayAds = false,
     this.authorized = true,
     this.onPopPushReplacement,
+    this.bottomNavigation,
   }) : super(key: key);
   final bool rtl;
   final Widget body;
@@ -31,6 +32,7 @@ class JOBody extends StatefulWidget {
   final bool displayAds;
   final bool authorized;
   final String? onPopPushReplacement;
+  final Widget? bottomNavigation;
 
   @override
   State<JOBody> createState() => _JOBodyState();
@@ -122,6 +124,7 @@ class _JOBodyState extends State<JOBody> with WidgetsBindingObserver {
                   ),
           ),
         ),
+        bottomNavigationBar: widget.bottomNavigation,
       ),
     );
   }
